@@ -16,7 +16,7 @@ App({
         subtitle: '具身智能 · 论文与行业前沿 · 每周五更新',
         repo: 'loonglee2025/robot-research-weekly',
         branch: 'main',
-        reportsPath: 'reports'
+        reportsPath: 'weekly'
       }
     ]
   }
