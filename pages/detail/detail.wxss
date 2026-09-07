@@ -67,6 +67,14 @@
   text-decoration: underline;
 }
 
+/* 数字脚注引用标记 */
+.ref {
+  color: #0d47a1;
+  font-size: 22rpx;
+  vertical-align: super;
+  padding: 0 2rpx;
+}
+
 /* 分割线 */
 .hr {
   height: 2rpx;

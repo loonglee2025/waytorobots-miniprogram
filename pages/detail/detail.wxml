@@ -6,6 +6,7 @@
     <text wx:elif="{{s.t === 'bold-italic'}}" class="b i">{{s.text}}</text>
     <text wx:elif="{{s.t === 'code'}}" class="code">{{s.text}}</text>
     <text wx:elif="{{s.t === 'link'}}" class="link" data-url="{{s.url}}" bindtap="copyLink">{{s.text}}</text>
+    <text wx:elif="{{s.t === 'ref'}}" class="ref">[{{s.text}}]</text>
     <text wx:else>{{s.text}}</text>
   </block>
 </template>
