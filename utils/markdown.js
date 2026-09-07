@@ -165,6 +165,24 @@ function parse(md) {
       continue;
     }
 
+    // 参考链接定义（连续 [n]: 标题 — URL 行，研究周报尾部参考链接节）
+    if (/^\[\d+\]:\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\[\d+\]:\s+/.test(lines[i])) {
+        const m = lines[i].match(/^\[(\d+)\]:\s+(.*)$/);
+        const body = m[2].trim();
+        const um = body.match(/^(.*?)\s*(https?:\/\/\S+)$/);
+        items.push({
+          num: parseInt(m[1], 10),
+          title: um ? um[1].replace(/[\s—–-]+$/, '').trim() : body,
+          url: um ? um[2] : ''
+        });
+        i++;
+      }
+      blocks.push({ type: 'refs', items });
+      continue;
+    }
+
     // 普通段落（合并到空行为止）
     const buf = [line.trim()];
     i++;
@@ -182,4 +200,105 @@ function parse(md) {
   return blocks;
 }
 
-module.exports = { parse, parseInline };
+/** 去除行内 Markdown 标记，得到纯文本 */
+function stripInline(text) {
+  return String(text || '')
+    .replace(/\[\^[^\]]*\]/g, '') // 脚注引用 [^1]
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, '') // 图片
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // 链接保留文字
+    .replace(/`([^`]*)`/g, '$1') // 行内代码
+    .replace(/\*\*\*([^*]+)\*\*\*/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*\n]+)\*/g, '$1')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function spansText(spans) {
+  return (spans || []).map(s => s.text).join('');
+}
+
+function truncate(text, maxLen) {
+  const t = String(text || '').trim();
+  if (t.length <= maxLen) return t;
+  return t.slice(0, maxLen).replace(/[\s，、；：:.,．]*$/, '') + '…';
+}
+
+/** 列表项导语：优先首个加粗片段，否则取首个冒号/句号前文本 */
+function itemLead(item) {
+  const bold = (item.spans || []).find(
+    s => (s.t === 'bold' || s.t === 'bold-italic') && s.text.trim().length >= 2
+  );
+  if (bold) return stripInline(bold.text);
+  const plain = stripInline(spansText(item.spans));
+  const at = plain.search(/[：:。；;]/);
+  return at > 0 ? plain.slice(0, at) : plain;
+}
+
+/** h2 章节内容 → 摘要文本：含列表则拼接各项导语，否则取首个段落/引用 */
+function sectionText(section) {
+  const list = section.find(b => b.type === 'ol' || b.type === 'ul');
+  if (list) {
+    return list.items.map(itemLead).filter(Boolean).join(' · ');
+  }
+  const p = section.find(b => b.type === 'p' || b.type === 'quote');
+  return p ? stripInline(spansText(p.spans)) : '';
+}
+
+/**
+ * 从周报 Markdown 提取列表摘要（全文或前几 KB 片段均可）。
+ * 适配数据仓库的历代格式：
+ *   1) 文首引用/段落内含「总判断」（ROS2 早期）
+ *   2) ## 总判断 / ## 导读 / ## 概览 章节（近期格式）
+ *   3) 兜底取第一个 h2 章节内容
+ */
+function extractSummary(mdText, maxLen) {
+  maxLen = maxLen || 100;
+  const blocks = parse(mdText);
+  const firstH2 = blocks.findIndex(b => b.type === 'h2');
+
+  // 1) 文首（首个 h2 之前）引用/段落内含「总判断」或「本周聚焦」
+  const head = firstH2 < 0 ? blocks : blocks.slice(0, firstH2);
+  for (const b of head) {
+    if (b.type !== 'quote' && b.type !== 'p') continue;
+    const plain = stripInline(spansText(b.spans));
+    const at = plain.indexOf('总判断');
+    if (at >= 0) {
+      return truncate(plain.slice(at).replace(/^总判断[：:]?\s*/, ''), maxLen);
+    }
+    const focus = plain.indexOf('本周聚焦');
+    if (focus >= 0) {
+      const t = plain
+        .slice(focus)
+        .replace(/^本周聚焦[：:]?\s*/, '')
+        .replace(/\s*编辑[：:].*$/, '')
+        .replace(/\s*\|.*$/, '');
+      return truncate(t, maxLen);
+    }
+  }
+
+  // 取 idx 处 h2 章节内容（到下一个 h2/hr 为止）
+  const pickSection = idx => {
+    const section = [];
+    for (let j = idx + 1; j < blocks.length; j++) {
+      if (blocks[j].type === 'h2' || blocks[j].type === 'hr') break;
+      section.push(blocks[j]);
+    }
+    return sectionText(section);
+  };
+
+  // 2) 摘要章节
+  const idx = blocks.findIndex(
+    b => b.type === 'h2' && /总判断|导读|概览/.test(spansText(b.spans))
+  );
+  if (idx >= 0) return truncate(pickSection(idx), maxLen);
+
+  // 3) 兜底：第一个 h2 章节
+  if (firstH2 >= 0) return truncate(pickSection(firstH2), maxLen);
+
+  // 4) 兜底：首个段落
+  const p = blocks.find(b => b.type === 'p');
+  return truncate(p ? stripInline(spansText(p.spans)) : '', maxLen);
+}
+
+module.exports = { parse, parseInline, extractSummary };

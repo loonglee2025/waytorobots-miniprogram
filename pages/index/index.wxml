@@ -36,6 +36,7 @@
       hover-class="report-item-hover"
     >
       <view class="report-title">{{item.title}}</view>
+      <view wx:if="{{item.summary}}" class="report-summary">{{item.summary}}</view>
       <view class="report-meta">
         <text class="muted">{{item.date}} 期</text>
         <text class="arrow">›</text>

@@ -70,6 +70,23 @@
           </view>
         </view>
 
+        <view wx:elif="{{blk.type === 'refs'}}" class="refs">
+          <view
+            wx:for="{{blk.items}}"
+            wx:key="num"
+            wx:for-item="ri"
+            class="ref-item"
+            data-url="{{ri.url}}"
+            bindtap="copyLink"
+          >
+            <text class="ref-num">[{{ri.num}}]</text>
+            <view class="ref-body">
+              <view class="ref-title">{{ri.title}}</view>
+              <view wx:if="{{ri.url}}" class="ref-url">{{ri.url}}</view>
+            </view>
+          </view>
+        </view>
+
         <view wx:elif="{{blk.type === 'table'}}" class="table-wrap">
           <scroll-view scroll-x>
             <view class="table">

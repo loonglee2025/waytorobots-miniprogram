@@ -1,5 +1,19 @@
 Page({
-  data: {},
+  data: {
+    repos: []
+  },
+
+  onLoad() {
+    const app = getApp();
+    const channels = (app.globalData && app.globalData.channels) || [];
+    this.setData({
+      repos: channels.map(c => ({
+        name: c.name,
+        repo: c.repo,
+        url: `https://github.com/${c.repo}`
+      }))
+    });
+  },
 
   previewQR() {
     wx.previewImage({
@@ -7,9 +21,10 @@ Page({
     });
   },
 
-  copyRepo() {
+  copyRepo(e) {
+    const { url } = e.currentTarget.dataset;
     wx.setClipboardData({
-      data: 'https://github.com/loonglee2025/ros2-weekly-digest',
+      data: url,
       success: () => wx.showToast({ title: '仓库地址已复制', icon: 'none' })
     });
   },

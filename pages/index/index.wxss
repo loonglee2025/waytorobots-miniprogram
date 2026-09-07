@@ -73,6 +73,17 @@
   font-weight: 600;
 }
 
+.report-summary {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #5a6070;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
 .report-meta {
   margin-top: 12rpx;
   display: flex;

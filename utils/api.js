@@ -2,7 +2,10 @@
  * GitHub 数据源封装（多频道）
  * 周报列表：GitHub Contents API（列出 reports/ 目录）
  * 周报内容：raw.githubusercontent.com 直取 Markdown 原文
+ * 周报摘要：Range 拉取文件前 8KB 提取，结果写入本地缓存
  */
+
+const md = require('./markdown');
 
 const app = getApp();
 
@@ -15,14 +18,15 @@ function getChannel(key) {
   return list.find(c => c.key === key) || list[0];
 }
 
-function request(url) {
+function request(url, extraHeader) {
   return new Promise((resolve, reject) => {
     wx.request({
       url,
-      header: {
-        'Accept': 'application/vnd.github+json',
-        'User-Agent': 'waytorobots-miniprogram'
-      },
+      // User-Agent 是 WebView 禁改头，设置了也会被运行时丢弃并告警，此处不设
+      header: Object.assign(
+        { 'Accept': 'application/vnd.github+json' },
+        extraHeader
+      ),
       success(res) {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(res.data);
@@ -57,4 +61,26 @@ function getReport(channelKey, name) {
   return request(url);
 }
 
-module.exports = { channels, getChannel, listReports, getReport };
+/** 获取某期周报的列表摘要（仅拉前 8KB 解析；周刊内容不可变，结果本地缓存） */
+function getReportSummary(channelKey, name) {
+  const cacheKey = `summary:v1:${channelKey}:${name}`;
+  let cached = '';
+  try {
+    cached = wx.getStorageSync(cacheKey);
+  } catch (e) {}
+  if (cached) return Promise.resolve(cached);
+
+  const ch = getChannel(channelKey);
+  const url = `https://raw.githubusercontent.com/${ch.repo}/${ch.branch}/${ch.reportsPath}/${name}`;
+  return request(url, { Range: 'bytes=0-8191' }).then(text => {
+    const summary = md.extractSummary(text);
+    if (summary) {
+      try {
+        wx.setStorageSync(cacheKey, summary);
+      } catch (e) {}
+    }
+    return summary;
+  });
+}
+
+module.exports = { channels, getChannel, listReports, getReport, getReportSummary };

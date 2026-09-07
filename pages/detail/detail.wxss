@@ -10,6 +10,7 @@
 
 .article {
   padding: 36rpx 32rpx;
+  overflow-wrap: break-word; /* 兜底：超长字符串不撑破卡片 */
 }
 
 /* 标题层级 */
@@ -117,6 +118,42 @@
 
 .li-body {
   flex: 1;
+}
+
+/* 参考链接 */
+.refs {
+  margin: 14rpx 0;
+}
+
+.ref-item {
+  display: flex;
+  margin: 12rpx 0;
+}
+
+.ref-num {
+  color: #0d47a1;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+  font-size: 26rpx;
+}
+
+.ref-body {
+  flex: 1;
+  min-width: 0; /* flex 子项默认可不收缩，置 0 长内容才能折行 */
+}
+
+.ref-title {
+  font-size: 26rpx;
+  color: #3a4048;
+  line-height: 1.5;
+}
+
+.ref-url {
+  margin-top: 2rpx;
+  font-size: 22rpx;
+  color: #8a8f99;
+  line-height: 1.4;
+  word-break: break-all; /* 无空格超长 URL 强制折行 */
 }
 
 /* 表格 */
