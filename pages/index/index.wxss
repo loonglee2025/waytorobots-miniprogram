@@ -1,0 +1,55 @@
+.header {
+  padding: 40rpx 32rpx 8rpx;
+}
+
+.brand {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #0d47a1;
+}
+
+.slogan {
+  margin-top: 6rpx;
+  font-size: 26rpx;
+  color: #8a8f99;
+}
+
+.state {
+  padding: 120rpx 0;
+  text-align: center;
+  color: #8a8f99;
+}
+
+.state.error {
+  color: #d32f2f;
+}
+
+.report-item {
+  display: block;
+}
+
+.report-item-hover {
+  background: #eef3fb;
+}
+
+.report-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.report-meta {
+  margin-top: 12rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  color: #b0b7c3;
+  font-size: 36rpx;
+}
+
+.footer {
+  text-align: center;
+  padding: 40rpx 0 60rpx;
+}

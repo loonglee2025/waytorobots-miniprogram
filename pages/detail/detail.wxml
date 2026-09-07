@@ -1,0 +1,84 @@
+<!-- 行内片段渲染模板：text / bold / italic / bold-italic / code / link -->
+<template name="spans">
+  <block wx:for="{{spans}}" wx:key="index" wx:for-item="s">
+    <text wx:if="{{s.t === 'bold'}}" class="b">{{s.text}}</text>
+    <text wx:elif="{{s.t === 'italic'}}" class="i">{{s.text}}</text>
+    <text wx:elif="{{s.t === 'bold-italic'}}" class="b i">{{s.text}}</text>
+    <text wx:elif="{{s.t === 'code'}}" class="code">{{s.text}}</text>
+    <text wx:elif="{{s.t === 'link'}}" class="link" data-url="{{s.url}}" bindtap="copyLink">{{s.text}}</text>
+    <text wx:else>{{s.text}}</text>
+  </block>
+</template>
+
+<view class="page">
+  <view wx:if="{{loading}}" class="state">正在加载周报内容…</view>
+  <view wx:elif="{{error}}" class="state error">{{error}}</view>
+
+  <scroll-view wx:else scroll-y class="content-scroll">
+    <view class="card article">
+      <block wx:for="{{blocks}}" wx:key="index" wx:for-item="blk">
+
+        <view wx:if="{{blk.type === 'h1'}}" class="h1">
+          <template is="spans" data="{{spans: blk.spans}}" />
+        </view>
+        <view wx:elif="{{blk.type === 'h2'}}" class="h2">
+          <template is="spans" data="{{spans: blk.spans}}" />
+        </view>
+        <view wx:elif="{{blk.type === 'h3'}}" class="h3">
+          <template is="spans" data="{{spans: blk.spans}}" />
+        </view>
+        <view wx:elif="{{blk.type === 'h4'}}" class="h4">
+          <template is="spans" data="{{spans: blk.spans}}" />
+        </view>
+
+        <view wx:elif="{{blk.type === 'hr'}}" class="hr" />
+
+        <view wx:elif="{{blk.type === 'p'}}" class="p">
+          <template is="spans" data="{{spans: blk.spans}}" />
+        </view>
+
+        <view wx:elif="{{blk.type === 'quote'}}" class="quote">
+          <template is="spans" data="{{spans: blk.spans}}" />
+        </view>
+
+        <view wx:elif="{{blk.type === 'ul'}}" class="ul">
+          <view
+            wx:for="{{blk.items}}"
+            wx:key="index"
+            wx:for-item="li"
+            class="li indent-{{li.indent}}"
+          >
+            <text class="dot">•</text>
+            <view class="li-body">
+              <template is="spans" data="{{spans: li.spans}}" />
+            </view>
+          </view>
+        </view>
+
+        <view wx:elif="{{blk.type === 'table'}}" class="table-wrap">
+          <scroll-view scroll-x>
+            <view class="table">
+              <view class="tr th">
+                <view wx:for="{{blk.header}}" wx:key="index" wx:for-item="cell" class="td">
+                  <template is="spans" data="{{spans: cell}}" />
+                </view>
+              </view>
+              <view wx:for="{{blk.rows}}" wx:key="index" wx:for-item="row" class="tr">
+                <view wx:for="{{row}}" wx:key="index" wx:for-item="cell" class="td">
+                  <template is="spans" data="{{spans: cell}}" />
+                </view>
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
+        <view wx:elif="{{blk.type === 'code'}}" class="codeblock">
+          <text selectable="{{true}}">{{blk.text}}</text>
+        </view>
+
+      </block>
+
+      <view class="end muted">— 全文完 · 公众号 WayToRobots 每周一更新 —</view>
+    </view>
+  </scroll-view>
+</view>

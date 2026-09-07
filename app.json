@@ -1,0 +1,25 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/detail/detail",
+    "pages/about/about"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#0d47a1",
+    "navigationBarTitleText": "WayToRobots",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f2f4f8",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "#0d47a1",
+    "backgroundColor": "#ffffff",
+    "list": [
+      { "pagePath": "pages/index/index", "text": "ROS2 周报" },
+      { "pagePath": "pages/about/about", "text": "关于" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

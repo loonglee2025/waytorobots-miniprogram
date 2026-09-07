@@ -1,0 +1,162 @@
+.state {
+  padding: 120rpx 0;
+  text-align: center;
+  color: #8a8f99;
+}
+
+.state.error {
+  color: #d32f2f;
+}
+
+.article {
+  padding: 36rpx 32rpx;
+}
+
+/* 标题层级 */
+.h1 {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #0d47a1;
+  margin: 8rpx 0 28rpx;
+  line-height: 1.4;
+}
+
+.h2 {
+  font-size: 36rpx;
+  font-weight: 700;
+  margin: 36rpx 0 16rpx;
+  padding-left: 16rpx;
+  border-left: 8rpx solid #0d47a1;
+  line-height: 1.4;
+}
+
+.h3 {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin: 28rpx 0 12rpx;
+  line-height: 1.45;
+}
+
+.h4 {
+  font-size: 30rpx;
+  font-weight: 600;
+  margin: 20rpx 0 8rpx;
+}
+
+/* 正文 */
+.p {
+  margin: 14rpx 0;
+  text-align: justify;
+}
+
+/* 行内样式 */
+.b { font-weight: 700; }
+.i { font-style: italic; }
+
+.code {
+  font-family: monospace;
+  background: #eef1f6;
+  border-radius: 6rpx;
+  padding: 2rpx 8rpx;
+  font-size: 26rpx;
+  color: #c7254e;
+}
+
+.link {
+  color: #0d47a1;
+  text-decoration: underline;
+}
+
+/* 分割线 */
+.hr {
+  height: 2rpx;
+  background: #e3e7ee;
+  margin: 32rpx 0;
+}
+
+/* 引用 */
+.quote {
+  margin: 16rpx 0;
+  padding: 16rpx 24rpx;
+  background: #f6f8fb;
+  border-left: 6rpx solid #b0c4de;
+  color: #5a6270;
+  border-radius: 0 12rpx 12rpx 0;
+}
+
+/* 列表 */
+.ul {
+  margin: 14rpx 0;
+}
+
+.li {
+  display: flex;
+  margin: 10rpx 0;
+}
+
+.li.indent-1 { padding-left: 32rpx; }
+.li.indent-2 { padding-left: 64rpx; }
+
+.dot {
+  color: #0d47a1;
+  margin-right: 14rpx;
+  flex-shrink: 0;
+}
+
+.li-body {
+  flex: 1;
+}
+
+/* 表格 */
+.table-wrap {
+  margin: 20rpx 0;
+  border: 2rpx solid #e3e7ee;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.table {
+  display: table;
+  min-width: 100%;
+}
+
+.tr {
+  display: table-row;
+}
+
+.th {
+  background: #eef3fb;
+  font-weight: 600;
+}
+
+.td {
+  display: table-cell;
+  padding: 14rpx 20rpx;
+  border-bottom: 2rpx solid #e3e7ee;
+  border-right: 2rpx solid #e3e7ee;
+  font-size: 26rpx;
+  white-space: nowrap;
+}
+
+.td:last-child {
+  border-right: none;
+}
+
+/* 代码块 */
+.codeblock {
+  margin: 20rpx 0;
+  padding: 24rpx;
+  background: #282c34;
+  color: #e6e6e6;
+  border-radius: 12rpx;
+  font-family: monospace;
+  font-size: 24rpx;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.end {
+  text-align: center;
+  margin-top: 48rpx;
+}

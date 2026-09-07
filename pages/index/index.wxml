@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="header">
+    <view class="brand">WayToRobots</view>
+    <view class="slogan">ROS2 技术周报 · 每周一更新</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="state">
+    <text>正在加载周报列表…</text>
+  </view>
+
+  <view wx:elif="{{error}}" class="state error">
+    <text>{{error}}</text>
+  </view>
+
+  <block wx:else>
+    <view
+      wx:for="{{reports}}"
+      wx:key="name"
+      class="card report-item"
+      data-name="{{item.name}}"
+      data-title="{{item.title}}"
+      bindtap="openReport"
+      hover-class="report-item-hover"
+    >
+      <view class="report-title">{{item.title}}</view>
+      <view class="report-meta">
+        <text class="muted">{{item.date}} 期</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <view wx:if="{{reports.length === 0}}" class="state">
+      <text class="muted">暂无周报</text>
+    </view>
+  </block>
+
+  <view class="footer muted">数据来源：GitHub · ros2-weekly-digest</view>
+</view>

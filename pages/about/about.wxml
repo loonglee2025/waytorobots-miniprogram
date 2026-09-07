@@ -1,0 +1,28 @@
+<view class="page">
+  <view class="card intro">
+    <view class="brand">WayToRobots</view>
+    <view class="desc">
+      一个专注于机器人技术的学习分享项目：ROS2 技术周报、机器人行业观察、论文研读与实战教程。
+    </view>
+    <view class="desc muted">
+      ROS2 周报内容由自动化流水线每周一生成，涵盖 ROS 2 核心开发、发行版动态、社区治理与工程实践，数据来源于 GitHub 开源仓库。
+    </view>
+  </view>
+
+  <view class="card qr-card">
+    <view class="qr-title">关注公众号</view>
+    <image
+      class="qr"
+      src="/assets/waytorobots_qr.jpg"
+      mode="widthFix"
+      bindtap="previewQR"
+      show-menu-by-longpress
+    />
+    <view class="muted qr-tip">微信扫码或长按识别，关注 WayToRobots</view>
+  </view>
+
+  <view class="card link-card" bindtap="copyRepo" hover-class="link-card-hover">
+    <view class="link-title">周报数据源（GitHub 开源）</view>
+    <view class="muted">loonglee2025/ros2-weekly-digest · 点击复制地址</view>
+  </view>
+</view>
