@@ -2,10 +2,10 @@
   <view class="card intro">
     <view class="brand">WayToRobots</view>
     <view class="desc">
-      一个专注于机器人技术的学习分享项目：ROS2 技术周报、机器人行业观察、论文研读与实战教程。
+      一个专注于机器人技术的学习分享项目：ROS2 技术周报、机器人研究周报、论文研读与实战教程。
     </view>
     <view class="desc muted">
-      ROS2 周报内容由自动化流水线每周一生成，涵盖 ROS 2 核心开发、发行版动态、社区治理与工程实践，数据来源于 GitHub 开源仓库。
+      ROS2 周报（每周一）覆盖 ROS 2 核心开发、发行版动态与社区治理；机器人研究周报（每周五）追踪具身智能、灵巧操作、世界模型等前沿进展。内容由自动化流水线生成并归档于 GitHub 开源仓库。
     </view>
   </view>
 

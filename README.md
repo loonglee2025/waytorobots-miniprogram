@@ -1,21 +1,26 @@
 # WayToRobots 微信小程序
 
-WayToRobots 公众号配套微信小程序，用于浏览 **ROS2 技术周报**（每周一自动更新）。
+WayToRobots 公众号配套微信小程序，用于浏览 **ROS2 技术周报**（每周一更新）与 **机器人研究周报**（每周五更新）。
 
 ## 功能
 
-- **周报列表**：按日期倒序展示全部历史周报，支持下拉刷新
-- **周报详情**：内置轻量 Markdown 渲染器，完整呈现标题层级、加粗、行内代码、链接、列表、表格、引用、分割线与代码块；外部链接点击复制到剪贴板
+- **双频道周报**：首页顶部切换「ROS2 周报 / 机器人研究周报」，按日期倒序展示历史周报，支持下拉刷新
+- **周报详情**：内置轻量 Markdown 渲染器，完整呈现标题层级、加粗、行内代码、链接、有序/无序列表（含缩进续行合并）、表格、引用、分割线与代码块；外部链接点击复制到剪贴板
 - **关于页**：公众号二维码（支持长按识别 / 点击预览）与数据源仓库地址
 
 ## 数据来源
 
 周报内容直接来自 GitHub 开源仓库，无需自建后端：
 
-- 列表：`GET https://api.github.com/repos/loonglee2025/ros2-weekly-digest/contents/reports`
-- 内容：`https://raw.githubusercontent.com/loonglee2025/ros2-weekly-digest/main/reports/<date>-weekly.md`
+| 频道 | 仓库 | 更新频率 |
+|---|---|---|
+| ROS2 周报 | [ros2-weekly-digest](https://github.com/loonglee2025/ros2-weekly-digest) | 每周一 |
+| 机器人研究周报 | [robot-research-weekly](https://github.com/loonglee2025/robot-research-weekly) | 每周五 |
 
-周报由 Hermes Agent 定时任务「ROS2 Weekly Digest」每周一自动生成并推送到该仓库。
+- 列表：`GET https://api.github.com/repos/<repo>/contents/reports`
+- 内容：`https://raw.githubusercontent.com/<repo>/main/reports/<date>-weekly.md`
+
+周报由 Hermes Agent 定时任务（ROS2 Weekly Digest / Robotic Research Weekly）自动生成并推送到对应仓库。新增频道只需在 `app.js` 的 `channels` 数组中追加配置。
 
 ## 项目结构
 

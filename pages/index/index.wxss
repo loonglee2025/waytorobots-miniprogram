@@ -14,6 +14,42 @@
   color: #8a8f99;
 }
 
+/* 频道切换 */
+.channel-tabs {
+  display: flex;
+  gap: 20rpx;
+  padding: 24rpx 24rpx 0;
+}
+
+.tab {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  border: 2rpx solid transparent;
+  box-shadow: 0 2rpx 12rpx rgba(13, 71, 161, 0.06);
+}
+
+.tab-active {
+  border-color: #0d47a1;
+  background: #eef3fb;
+}
+
+.tab-name {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.tab-active .tab-name {
+  color: #0d47a1;
+}
+
+.tab-sub {
+  margin-top: 4rpx;
+  font-size: 22rpx;
+  color: #8a8f99;
+}
+
 .state {
   padding: 120rpx 0;
   text-align: center;

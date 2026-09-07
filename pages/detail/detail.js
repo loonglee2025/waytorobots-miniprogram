@@ -10,7 +10,8 @@ Page({
   },
 
   onLoad(query) {
-    const { name, title } = query;
+    const { ch, name, title } = query;
+    this.channel = ch || 'ros2';
     if (title) {
       const t = decodeURIComponent(title);
       this.setData({ title: t });
@@ -22,7 +23,7 @@ Page({
 
   fetchReport() {
     this.setData({ loading: true, error: '' });
-    api.getReport(this.name)
+    api.getReport(this.channel, this.name)
       .then(text => {
         const blocks = md.parse(text);
         this.setData({ blocks, loading: false });
@@ -45,8 +46,8 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: this.data.title || 'ROS2 技术周报',
-      path: `/pages/detail/detail?name=${encodeURIComponent(this.name)}&title=${encodeURIComponent(this.data.title)}`
+      title: this.data.title || '机器人技术周报',
+      path: `/pages/detail/detail?ch=${this.channel}&name=${encodeURIComponent(this.name)}&title=${encodeURIComponent(this.data.title)}`
     };
   }
 });

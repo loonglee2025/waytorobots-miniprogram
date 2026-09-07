@@ -114,18 +114,52 @@ function parse(md) {
       continue;
     }
 
-    // 无序列表（连续 -/* 行）
+    // 无序列表（连续 -/* 行；缩进的续行并入上一项）
     if (/^\s*[-*]\s+/.test(line)) {
       const items = [];
       while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
         const indent = lines[i].match(/^(\s*)/)[1].length;
+        let text = lines[i].replace(/^\s*[-*]\s+/, '').trim();
+        i++;
+        // 续行：缩进且非新列表项/块级起头的非空行，合并进当前条目
+        while (
+          i < lines.length &&
+          /^\s{2,}\S/.test(lines[i]) &&
+          !/^\s*[-*]\s+/.test(lines[i]) &&
+          !/^(#{1,6}\s|```|>\s?)/.test(lines[i])
+        ) {
+          text += ' ' + lines[i].trim().replace(/\s{2,}$/, '');
+          i++;
+        }
         items.push({
           indent: Math.min(Math.floor(indent / 2), 2),
-          spans: parseInline(lines[i].replace(/^\s*[-*]\s+/, '').trim())
+          spans: parseInline(text)
         });
-        i++;
       }
       blocks.push({ type: 'ul', items });
+      continue;
+    }
+
+    // 有序列表（连续 1. 2. 行；续行规则同无序列表）
+    if (/^\s*\d+\.\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
+        const num = parseInt(lines[i].match(/^\s*(\d+)\./)[1], 10);
+        let text = lines[i].replace(/^\s*\d+\.\s+/, '').trim();
+        i++;
+        while (
+          i < lines.length &&
+          /^\s{2,}\S/.test(lines[i]) &&
+          !/^\s*\d+\.\s+/.test(lines[i]) &&
+          !/^\s*[-*]\s+/.test(lines[i]) &&
+          !/^(#{1,6}\s|```|>\s?)/.test(lines[i])
+        ) {
+          text += ' ' + lines[i].trim().replace(/\s{2,}$/, '');
+          i++;
+        }
+        items.push({ num, spans: parseInline(text) });
+      }
+      blocks.push({ type: 'ol', items });
       continue;
     }
 
@@ -135,7 +169,7 @@ function parse(md) {
     while (
       i < lines.length &&
       lines[i].trim() &&
-      !/^(#{1,6}\s|```|\s*[-*]\s|>\s?|(-{3,}|\*{3,})\s*$)/.test(lines[i]) &&
+      !/^(#{1,6}\s|```|\s*[-*]\s|\s*\d+\.\s|>\s?|(-{3,}|\*{3,})\s*$)/.test(lines[i]) &&
       !(lines[i].trim().startsWith('|') && i + 1 < lines.length && isTableSep(lines[i + 1]))
     ) {
       buf.push(lines[i].trim());

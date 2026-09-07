@@ -1,7 +1,20 @@
 <view class="page">
   <view class="header">
     <view class="brand">WayToRobots</view>
-    <view class="slogan">ROS2 技术周报 · 每周一更新</view>
+    <view class="slogan">机器人技术周报 · 每周自动更新</view>
+  </view>
+
+  <view class="channel-tabs">
+    <view
+      wx:for="{{channels}}"
+      wx:key="key"
+      class="tab {{index === current ? 'tab-active' : ''}}"
+      data-index="{{index}}"
+      bindtap="switchChannel"
+    >
+      <view class="tab-name">{{item.name}}</view>
+      <view class="tab-sub">{{item.subtitle}}</view>
+    </view>
   </view>
 
   <view wx:if="{{loading}}" class="state">
@@ -34,5 +47,5 @@
     </view>
   </block>
 
-  <view class="footer muted">数据来源：GitHub · ros2-weekly-digest</view>
+  <view class="footer muted">数据来源：GitHub · 每周自动生成并归档</view>
 </view>

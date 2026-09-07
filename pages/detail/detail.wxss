@@ -103,6 +103,10 @@
   flex-shrink: 0;
 }
 
+.dot.num {
+  font-weight: 600;
+}
+
 .li-body {
   flex: 1;
 }
