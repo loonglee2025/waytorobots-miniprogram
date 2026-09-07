@@ -11,7 +11,7 @@
 function parseInline(text) {
   const spans = [];
   let rest = text || '';
-  const re = /(`[^`]+`)|(\*\*\*[^*]+\*\*\*)|(\*\*[^*]+\*\*)|(\*[^*\n]+\*)|(\[[^\]]*\]\([^)]+\))|(\[\^\d+\])/;
+  const re = /(`[^`]+`)|(\*\*\*[^*]+\*\*\*)|(\*\*[^*]+\*\*)|(\*[^*\n]+\*)|(\[[^\]]*\]\([^)]+\))|(\[\d+\](?!\())/;
   let guard = 0;
   while (rest.length && guard < 500) {
     guard++;
@@ -34,7 +34,7 @@ function parseInline(text) {
       const lm = tok.match(/\[([^\]]*)\]\(([^)]+)\)/);
       spans.push({ t: 'link', text: lm[1] || lm[2], url: lm[2] });
     } else if (m[6]) {
-      spans.push({ t: 'ref', text: tok.slice(2, -1) });
+      spans.push({ t: 'ref', text: tok.slice(1, -1) });
     }
     rest = rest.slice(m.index + tok.length);
   }
